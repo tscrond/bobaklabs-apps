@@ -1,0 +1,33 @@
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: "websecure"
+          scheme: "https"
+  websecure:
+    address: ":443"
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+  # You can remove the 'file' provider section if it's not needed
+  file:
+    filename: /config.yml
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: "tomek.skrond@gmail.com"  # Replace with your email address
+      storage: "/letsencrypt/acme.json"
+      dnsChallenge:
+        provider: cloudflare
+        delayBeforeCheck: 0
+log:
+  level: INFO
