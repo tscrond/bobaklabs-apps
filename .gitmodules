@@ -1,0 +1,3 @@
+[submodule "ai-lab"]
+	path = ai-lab
+	url = git@github.com:tscrond/ai-lab.git
