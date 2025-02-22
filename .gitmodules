@@ -1,3 +1,6 @@
 [submodule "ai-lab"]
 	path = ai-lab
 	url = git@github.com:tscrond/ai-lab.git
+[submodule "k3s-lab-toolkit"]
+	path = k3s-lab-toolkit
+	url = git@github.com:tscrond/k3s-lab-toolkit.git
