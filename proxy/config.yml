@@ -1,132 +1,155 @@
-http:
+tcp:
+  routers:
+    minecraft:
+      entryPoints:
+        - minecraft
+      rule: "HostSNI(`*`)"
+      service: minecraft-server
+      tls: false  # Minecraft uses plain TCP, no TLS
+    minecraft-rl:
+      entryPoints:
+        - minecraft-rl
+      rule: "HostSNI(`*`)"
+      service: minecraft-server-rl
+      tls: false  # Minecraft uses plain TCP, no TLS
 
+
+  services:
+    minecraft-server-rl:
+      loadBalancer:
+        servers:
+          - address: "192.168.1.99:25566"
+    minecraft-server:
+      loadBalancer:
+        servers:
+          - address: "192.168.1.99:25565"
+
+
+http:
   routers:
     proxmox-genesis-local:
-      entryPoints:
-        - "web"
-        - "websecure"
-      rule: "Host (`proxmox-genesis.local.bobaklabs.com`)"
+      entryPoints: ["web", "websecure"]
+      rule: "Host(`proxmox-genesis.local.bobaklabs.com`)"
       tls:
         certResolver: letsencrypt
       service: proxmox-genesis
 
     proxmox-genesis:
-      entryPoints:
-        - "web"
-        - "websecure"
-      rule: "Host (`proxmox-genesis.bobaklabs.com`)"
+      entryPoints: ["web", "websecure"]
+      rule: "Host(`proxmox-genesis.bobaklabs.com`)"
       tls:
         certResolver: letsencrypt
       service: proxmox-genesis
 
     proxmox-hyperbook-local:
-      entryPoints:
-        - "web"
-        - "websecure"
-      rule: "Host (`proxmox-hyperbook.local.bobaklabs.com`)"
+      entryPoints: ["web", "websecure"]
+      rule: "Host(`proxmox-hyperbook.local.bobaklabs.com`)"
       tls:
         certResolver: letsencrypt
       service: proxmox-hyperbook
 
     proxmox-hyperbook:
-      entryPoints:
-        - "web"
-        - "websecure"
-      rule: "Host (`proxmox-hyperbook.bobaklabs.com`)"
+      entryPoints: ["web", "websecure"]
+      rule: "Host(`proxmox-hyperbook.bobaklabs.com`)"
       tls:
         certResolver: letsencrypt
       service: proxmox-hyperbook
 
     gpt-local:
-      entryPoints:
-        - "web"
-        - "websecure"
-      rule: "Host (`gpt.local.bobaklabs.com`)"
+      entryPoints: ["web", "websecure"]
+      rule: "Host(`gpt.local.bobaklabs.com`)"
       tls:
         certResolver: letsencrypt
       service: gpt
 
     gpt:
-      entryPoints:
-        - "web"
-        - "websecure"
-      rule: "Host (`gpt.bobaklabs.com`)"
+      entryPoints: ["web", "websecure"]
+      rule: "Host(`gpt.bobaklabs.com`)"
       tls:
         certResolver: letsencrypt
       service: gpt
 
     monitoring-genesis-local:
-      entryPoints:
-        - "web"
-        - "websecure"
-      rule: "Host (`monitoring-genesis.local.bobaklabs.com`)"
+      entryPoints: ["web", "websecure"]
+      rule: "Host(`monitoring-genesis.local.bobaklabs.com`)"
       tls:
         certResolver: letsencrypt
       service: monitoring-genesis
 
     monitoring-genesis:
-      entryPoints:
-        - "web"
-        - "websecure"
-      rule: "Host (`monitoring-genesis.bobaklabs.com`)"
+      entryPoints: ["web", "websecure"]
+      rule: "Host(`monitoring-genesis.bobaklabs.com`)"
       tls:
         certResolver: letsencrypt
       service: monitoring-genesis
 
     gitea-local:
-      entryPoints:
-        - "web"
-        - "websecure"
-      rule: "Host (`gitea.local.bobaklabs.com`)"
+      entryPoints: ["web", "websecure"]
+      rule: "Host(`gitea.local.bobaklabs.com`)"
       tls:
         certResolver: letsencrypt
       service: gitea
 
     gitea:
-      entryPoints:
-        - "web"
-        - "websecure"
-      rule: "Host (`gitea.bobaklabs.com`)"
+      entryPoints: ["web", "websecure"]
+      rule: "Host(`gitea.bobaklabs.com`)"
       tls:
         certResolver: letsencrypt
       service: gitea
+
+    dropper-frontend:
+      entryPoints: ["web", "websecure"]
+      rule: "Host(`dropper.bobaklabs.com`)"
+      tls:
+        certResolver: letsencrypt
+      service: dropper-frontend
+
+    dropper-api:
+      entryPoints: ["web", "websecure"]
+      rule: "Host(`dropper-api.bobaklabs.com`)"
+      tls:
+        certResolver: letsencrypt
+      service: dropper-backend
+
 
 
   services:
     proxmox-genesis:
       loadBalancer:
-        serversTransport: default
+        serversTransport: default  
         servers:
           - url: "https://192.168.1.102:8006"
-        passHostHeader: true
 
     proxmox-hyperbook:
       loadBalancer:
-        serversTransport: default
+        serversTransport: default  
         servers:
           - url: "https://192.168.1.100:8006"
-        passHostHeader: true
 
     gpt:
       loadBalancer:
-        serversTransport: default
+        serversTransport: default  
         servers:
           - url: "http://192.168.1.201:3000"
-        passHostHeader: true
 
     monitoring-genesis:
       loadBalancer:
-        serversTransport: default
+        serversTransport: default  
         servers:
           - url: "http://192.168.1.102:3000"
-        passHostHeader: true
 
-    gitea:
+   dropper-backend:
       loadBalancer:
         serversTransport: default
         servers:
           - url: "http://192.168.1.99:3000"
-        passHostHeader: true
+
+    dropper-frontend:
+      loadBalancer:
+        serversTransport: default
+        servers:
+          - url: "http://192.168.1.99:8000"
+
 
   serversTransports:
     default:

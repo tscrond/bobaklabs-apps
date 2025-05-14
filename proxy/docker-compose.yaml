@@ -5,17 +5,19 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "25565:25565"
+      - "25566:25566"
     environment:
-      - CF_API_EMAIL=${CLOUDFLARE_API_EMAIL}   # Cloudflare API Email (for DNS challenge)
-      - CF_DNS_API_TOKEN=${CLOUDFLARE_API_KEY}       # Cloudflare API Key (for DNS challenge)
+      - CF_API_EMAIL=${CLOUDFLARE_API_EMAIL}  # Cloudflare API Email (for DNS challenge)
+      - CF_DNS_API_TOKEN=${CLOUDFLARE_API_KEY}  # Cloudflare API Key (for DNS challenge)
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro  # Allows auto-detection of running containers
       - ./traefik.yml:/etc/traefik/traefik.yml:ro  # Traefik config
       - ./letsencrypt:/letsencrypt  # Store SSL certs
       - ./config.yml:/config.yml:ro
-
     networks:
       - traefik_proxy
 
 networks:
   traefik_proxy:
+

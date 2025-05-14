@@ -12,13 +12,13 @@ entryPoints:
           scheme: "https"
   websecure:
     address: ":443"
+  minecraft:
+    address: ":25565"
+  minecraft-rl:
+    address: ":25566"
 
 providers:
-  docker:
-    endpoint: "unix:///var/run/docker.sock"
-    exposedByDefault: false
-  # You can remove the 'file' provider section if it's not needed
-  file:
+ file:
     filename: /config.yml
 
 certificatesResolvers:
@@ -30,4 +30,4 @@ certificatesResolvers:
         provider: cloudflare
         delayBeforeCheck: 0
 log:
-  level: INFO
+  level: DEBUG
